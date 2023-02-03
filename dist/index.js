@@ -13,7 +13,7 @@ const defaultState = {
   elementDimensions: { width: 0, height: 0 },
   elementOffset: { left: 0, top: 0 },
   itemPosition: { x: 0, y: 0 },
-  itemDimensions: { width: 0, height: 0 }
+  itemDimensions: { width: 0, height: 0 },
 };
 
 class ReactInputPosition extends Component {
@@ -38,13 +38,13 @@ class ReactInputPosition extends Component {
       MOUSE_ACTIVATION.CLICK,
       MOUSE_ACTIVATION.DOUBLE_CLICK,
       MOUSE_ACTIVATION.HOVER,
-      MOUSE_ACTIVATION.MOUSE_DOWN
+      MOUSE_ACTIVATION.MOUSE_DOWN,
     ]).isRequired,
     touchActivationMethod: PropTypes.oneOf([
       TOUCH_ACTIVATION.DOUBLE_TAP,
       TOUCH_ACTIVATION.LONG_TOUCH,
       TOUCH_ACTIVATION.TAP,
-      TOUCH_ACTIVATION.TOUCH
+      TOUCH_ACTIVATION.TOUCH,
     ]).isRequired,
     tapDurationInMs: PropTypes.number,
     doubleTapDurationInMs: PropTypes.number,
@@ -69,13 +69,11 @@ class ReactInputPosition extends Component {
     centerItemOnLoad: PropTypes.bool,
     alignItemOnActivePos: PropTypes.bool,
     itemMovementMultiplier: PropTypes.number,
-    cursorStyle: PropTypes.string,
-    cursorStyleActive: PropTypes.string,
     onUpdate: PropTypes.func,
     overrideState: PropTypes.object,
     mouseDownAllowOutside: PropTypes.bool,
     onActivate: PropTypes.func,
-    onDeactivate: PropTypes.func
+    onDeactivate: PropTypes.func,
   };
 
   static defaultProps = {
@@ -87,10 +85,9 @@ class ReactInputPosition extends Component {
     style: {},
     minUpdateSpeedInMs: 1,
     itemMovementMultiplier: 1,
-    cursorStyle: "crosshair",
     mouseActivationMethod: MOUSE_ACTIVATION.CLICK,
     touchActivationMethod: TOUCH_ACTIVATION.TAP,
-    mouseDownAllowOutside: false
+    mouseDownAllowOutside: false,
   };
 
   componentDidMount() {
@@ -129,7 +126,7 @@ class ReactInputPosition extends Component {
     this.supportsPassive = false;
     try {
       const options = Object.defineProperty({}, "passive", {
-        get: () => (this.supportsPassive = true)
+        get: () => (this.supportsPassive = true),
       });
       window.addEventListener("testPassive", null, options);
       window.removeEventListener("testPassive", null, options);
@@ -216,7 +213,7 @@ class ReactInputPosition extends Component {
     for (let key in mouseInteractionMethods) {
       this.mouseHandlers.push({
         event: key.toLowerCase(),
-        handler: mouseInteractionMethods[key].bind(this)
+        handler: mouseInteractionMethods[key].bind(this),
       });
     }
   }
@@ -229,7 +226,7 @@ class ReactInputPosition extends Component {
     for (let key in touchInteractionMethods) {
       this.touchHandlers.push({
         event: key.toLowerCase(),
-        handler: touchInteractionMethods[key].bind(this)
+        handler: touchInteractionMethods[key].bind(this),
       });
     }
   }
@@ -242,12 +239,8 @@ class ReactInputPosition extends Component {
     if (this.props.minUpdateSpeedInMs && !this.refresh) return;
     this.refresh = false;
 
-    const {
-      left,
-      top,
-      width,
-      height
-    } = this.containerRef.current.getBoundingClientRect();
+    const { left, top, width, height } =
+      this.containerRef.current.getBoundingClientRect();
 
     const {
       trackItemPosition,
@@ -263,7 +256,7 @@ class ReactInputPosition extends Component {
       itemPositionMinY,
       itemPositionMaxY,
       itemPositionLimitBySize,
-      itemPositionLimitInternal
+      itemPositionLimitInternal,
     } = this.props;
 
     const { activePosition, itemPosition } = this.getState();
@@ -274,8 +267,8 @@ class ReactInputPosition extends Component {
       elementOffset: { left, top },
       activePosition: {
         x: Math.min(Math.max(0, position.x - left), width),
-        y: Math.min(Math.max(0, position.y - top), height)
-      }
+        y: Math.min(Math.max(0, position.y - top), height),
+      },
     };
 
     // Activate if necessary
@@ -287,7 +280,7 @@ class ReactInputPosition extends Component {
 
       stateUpdate.itemDimensions = {
         width: itemSize.width,
-        height: itemSize.height
+        height: itemSize.height,
       };
     }
 
@@ -295,7 +288,7 @@ class ReactInputPosition extends Component {
     if (trackPreviousPosition || trackItemPosition) {
       stateUpdate.prevActivePosition = {
         x: activePosition.x,
-        y: activePosition.y
+        y: activePosition.y,
       };
     }
 
@@ -303,7 +296,7 @@ class ReactInputPosition extends Component {
     if (trackPassivePosition) {
       stateUpdate.passivePosition = {
         x: position.x - left,
-        y: position.y - top
+        y: position.y - top,
       };
     }
 
@@ -326,7 +319,7 @@ class ReactInputPosition extends Component {
 
       stateUpdate.itemPosition = {
         x: centerX || 0,
-        y: centerY || 0
+        y: centerY || 0,
       };
 
       return this.updateState(stateUpdate, this.startRefreshTimer);
@@ -382,8 +375,8 @@ class ReactInputPosition extends Component {
     this.updateState({
       passivePosition: {
         x: position.x - left,
-        y: position.y - top
-      }
+        y: position.y - top,
+      },
     });
   }
 
@@ -432,13 +425,13 @@ class ReactInputPosition extends Component {
   }
 
   addMouseEventListeners() {
-    this.mouseHandlers.forEach(mouse => {
+    this.mouseHandlers.forEach((mouse) => {
       this.containerRef.current.addEventListener(mouse.event, mouse.handler);
     });
   }
 
   addTouchEventListeners() {
-    this.touchHandlers.forEach(touch => {
+    this.touchHandlers.forEach((touch) => {
       this.containerRef.current.addEventListener(
         touch.event,
         touch.handler,
@@ -448,13 +441,13 @@ class ReactInputPosition extends Component {
   }
 
   removeMouseEventListeners() {
-    this.mouseHandlers.forEach(mouse => {
+    this.mouseHandlers.forEach((mouse) => {
       this.containerRef.current.removeEventListener(mouse.event, mouse.handler);
     });
   }
 
   removeTouchEventListeners() {
-    this.touchHandlers.forEach(touch => {
+    this.touchHandlers.forEach((touch) => {
       this.containerRef.current.removeEventListener(
         touch.event,
         touch.handler,
@@ -474,13 +467,7 @@ class ReactInputPosition extends Component {
   }
 
   render() {
-    const {
-      style,
-      className,
-      children,
-      cursorStyle,
-      cursorStyleActive
-    } = this.props;
+    const { style, className, children } = this.props;
     const { active } = this.getState();
 
     const combinedStyle = {
@@ -489,7 +476,6 @@ class ReactInputPosition extends Component {
       MozUserSelect: "none",
       msUserSelect: "none",
       userSelect: "none",
-      cursor: active ? cursorStyleActive || cursorStyle : cursorStyle
     };
 
     return (
@@ -497,7 +483,7 @@ class ReactInputPosition extends Component {
         {utils.decorateChildren(children, {
           ...this.getState(),
           itemRef: this.itemRef,
-          onLoadRefresh: this.onLoadRefresh
+          onLoadRefresh: this.onLoadRefresh,
         })}
       </div>
     );

@@ -32,6 +32,7 @@ function mouseMove(e) {
 }
 
 function mouseLeave() {
+  this.deactivate();
   this.mouseDown = false;
 }
 
@@ -40,5 +41,5 @@ export default {
   mouseUp,
   mouseMove,
   mouseLeave,
-  dragStart: utils.preventDefault
+  dragStart: utils.preventDefault,
 };
